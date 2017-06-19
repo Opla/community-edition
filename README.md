@@ -1,5 +1,6 @@
 # opla.ai
-The chatbot builder
+The ultimate chatbot builder.
+
 In 5 minutes you create your own conversational assistant using this opensource tool.
 
 # Getting started
