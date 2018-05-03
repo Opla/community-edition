@@ -1,0 +1,65 @@
+version: "2"
+services:
+
+  db:
+    image: mariadb:10.2
+    restart: always
+    environment:
+      MYSQL_DATABASE: opla
+      MYSQL_USER: opla
+      MYSQL_PASSWORD: foo
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+    networks: 
+      - private
+
+  backend:
+    build: node/back
+    restart: always
+    networks:
+      private: 
+        aliases:  ["${OPLA_BACKEND_DOMAIN}"]
+    expose:
+      - "80"
+    depends_on:
+      - db
+    environment:
+      - PORT=80
+      - OPLA_BACKEND_DATABASE_HOST
+      - OPLA_BACKEND_DATABASE_NAME
+      - OPLA_BACKEND_DATABASE_USER
+      - OPLA_BACKEND_DATABASE_PASS
+
+  front:
+    build: node/front
+    restart: always
+    networks:
+      - private
+    depends_on:
+      - backend
+    expose:
+      - "80"
+    environment:
+      - OPLA_BACKEND_DOMAIN
+      - OPLA_FRONT_CLIENT_NAME
+      - PORT=80
+    volumes:
+      - "/srv/app/config"
+
+  nginx:
+    build: nginx
+    restart: always
+    depends_on:
+      - front
+    ports:
+      - "80:80"
+    networks: 
+      - private
+      - public
+    environment:
+      - OPLA_FRONT_DOMAIN
+      - OPLA_BACKEND_DOMAIN
+    command: /bin/bash -c "envsubst < /etc/nginx/conf.d/back.template > /etc/nginx/conf.d/back.conf && envsubst < /etc/nginx/conf.d/front.template > /etc/nginx/conf.d/front.conf && nginx -g 'daemon off;'"
+
+networks:
+  public: 
+  private: 
