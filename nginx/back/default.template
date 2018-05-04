@@ -1,0 +1,12 @@
+server {
+    listen 80;
+    server_name ${OPLA_BACKEND_DOMAIN};
+    underscores_in_headers on;
+
+    location / {
+        proxy_pass http://backend;
+        proxy_set_header Upgrade ${DOLLAR}http_upgrade;
+        proxy_set_header Connection ${DOLLAR}connection_upgrade;
+        proxy_http_version 1.1;
+    }
+}

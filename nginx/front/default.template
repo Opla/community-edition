@@ -1,0 +1,8 @@
+server {
+    listen 80;
+    server_name ${OPLA_FRONT_DOMAIN};
+
+    location / {
+        proxy_pass http://front;
+    }
+}
