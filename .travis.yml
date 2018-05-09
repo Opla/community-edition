@@ -1,19 +1,16 @@
-language: bash
-
-env:
-  - DOCKER_COMPOSE_VERSION=1.21.0
-
-before_script:
-  - docker-compose up &
-
-script:
-  - ./travis.sh
-
-before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
+jobs:
+  include:
+      # Stage that tests the docker-compose part.
+    - stage: test
+      before_script: 
+        - docker-compose up &
+      script: ./test.sh
+      # Stage that tests the install script itself.
+    - sudo: required
+      before_script:
+        - ./install.sh --non-interactive --rev $TRAVIS_COMMIT &
+      script: ./test.sh
+      # Stage that tests the install script on macos.
 
 addons:
   hosts:
