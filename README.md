@@ -1,3 +1,5 @@
+Deprecated see https://github.com/Opla/opla
+
 # opla.ai
 The ultimate chatbot builder.
 
