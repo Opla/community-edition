@@ -1,5 +1,10 @@
 FROM node:8.11 as builder
 
+ARG OPLA_BACKEND_DATABASE_HOST=db
+ARG OPLA_BACKEND_DATABASE_NAME=opla
+ARG OPLA_BACKEND_DATABASE_USER=opla
+ARG OPLA_BACKEND_DATABASE_PASS=foo 
+
 RUN apt-get update && \
     apt-get install -y \
       zip \
@@ -12,10 +17,6 @@ RUN cd /tmp && wget https://github.com/Opla/backend/archive/master.zip && \
     mv backend-master /srv/app && \
     rm /tmp/master.zip
 
-ENV OPLA_BACKEND_DATABASE_HOST=db \
-    OPLA_BACKEND_DATABASE_NAME=opla \
-    OPLA_BACKEND_DATABASE_USER=opla \
-    OPLA_BACKEND_DATABASE_PASS=foo 
 
 RUN cd /srv/app \
     && yarn install \
