@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name ${OPLA_BACKEND_DOMAIN};
+    server_name ${OPLA_API_DOMAIN};
     underscores_in_headers on;
 
     location / {

@@ -11,4 +11,4 @@ done
 
 ./bin/opla migrations up --non-interactive
 
-exec node dist/
+exec node --inspect dist/
