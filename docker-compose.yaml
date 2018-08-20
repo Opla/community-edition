@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
 
   db:
@@ -13,11 +13,11 @@ services:
       - private
 
   backend:
-    image: "opla/backend:feature_dockerfile"
+    image: "opla/backend:latest"
     restart: always
     networks:
       private: 
-        aliases:  ["${OPLA_BACKEND_DOMAIN}"]
+        aliases:  ["${OPLA_API_DOMAIN}"]
     expose:
       - "80"
     depends_on:
@@ -30,7 +30,7 @@ services:
       - OPLA_BACKEND_DATABASE_PASS
 
   front:
-    image: "opla/front:feature_dockerfile"
+    image: "opla/front:latest"
     restart: always
     networks:
       - private
@@ -40,9 +40,11 @@ services:
       - "80"
     environment:
       - PORT=80
-      - OPLA_BACKEND_DOMAIN
+      - OPLA_API_DOMAIN
       - OPLA_FRONT_CLIENT_NAME
       - OPLA_BACKEND_PORT
+      - APP_INSTANCE_NAME=LOCAL
+      - APP_INSTANCE_COLOR=#42f44e
     volumes:
       - "/srv/app/config"
 
@@ -58,7 +60,7 @@ services:
       - public
     environment:
       - OPLA_FRONT_DOMAIN
-      - OPLA_BACKEND_DOMAIN
+      - OPLA_API_DOMAIN
     command: /bin/bash -c "envsubst < /etc/nginx/conf.d/back.template > /etc/nginx/conf.d/back.conf && envsubst < /etc/nginx/conf.d/front.template > /etc/nginx/conf.d/front.conf && nginx -g 'daemon off;'"
 
 networks:

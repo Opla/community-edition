@@ -5,8 +5,8 @@ cd /srv/app
 touch /tmp/foo
 while true;
 do
-  echo "Connecting to the backend at '${OPLA_BACKEND_DOMAIN}'..."
-  up=`wget -o /tmp/foo ${OPLA_BACKEND_DOMAIN}/api/v1/admin/languages | grep '200' /tmp/foo | wc -l`
+  echo "Connecting to the backend at '${OPLA_API_DOMAIN}'..."
+  up=`wget -o /tmp/foo ${OPLA_API_DOMAIN}/api/v1/admin/languages | grep '200' /tmp/foo | wc -l`
   echo $up;
   if [ "$up" -eq "1" ]; then
     break
@@ -21,12 +21,12 @@ if [ ! -f config/default.json ]; then
   ./bin/opla init --non-interactive \
   --overwrite \
   --client-name ${OPLA_FRONT_CLIENT_NAME} \
-  --api-host ${OPLA_BACKEND_DOMAIN} \
+  --api-host ${OPLA_API_DOMAIN} \
   --api-port 80 \
   --api-protocol http
 fi
 
 yarn build:prod
 cd /srv/app/dist
-exec node .
+exec node --inspect .
 

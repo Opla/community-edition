@@ -273,6 +273,7 @@ _() {
 
 	if [ -z "$NO_RUN" ]; then
 		echo "# Starting docker-compose..."
+		. .env
 		docker-compose up -d &
 		test_opla_up
 		if [ -z "$NON_INTERACTIVE" ]; then
